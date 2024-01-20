@@ -2,7 +2,7 @@ from .format import *
 from .model import *
 
 
-def deinit_program(prog : Program) -> Program:
+def deinit_program(prog: Program) -> Program:
     return Program(deinit_statements(prog.statements))
 
 

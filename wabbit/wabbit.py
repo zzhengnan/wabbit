@@ -61,7 +61,7 @@ def cli() -> argparse.Namespace:
 
 
 def compile(
-    fname : str,
+    fname: str,
     show_tokenize: bool = False,
     show_parse: bool = True,
     show_foldconstant: bool = False,
@@ -109,7 +109,7 @@ def compile(
 
     out_name = f'{fname}.ll'
     with open(out_name, 'w') as f:
-         f.write(prog_ll)
+        f.write(prog_ll)
     print(f'Compiled program saved to {out_name!r}')
     return prog, prog_ll
 

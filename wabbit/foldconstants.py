@@ -1,14 +1,9 @@
-from operator import add, sub, mul, floordiv
+from operator import add, floordiv, mul, sub
+
 from .format import *
 from .model import *
 
-
-MATH_OP_OPERATORS = {
-    Add: add,
-    Sub: sub,
-    Mul: mul,
-    Div: floordiv
-}
+MATH_OP_OPERATORS = {Add: add, Sub: sub, Mul: mul, Div: floordiv}
 
 
 def fold_program(prog: Program) -> Program:
@@ -32,7 +27,7 @@ def fold_statement(stmt: Statement) -> Statement:
         return If(
             fold_relation(stmt.test),
             fold_statements(stmt.consequence),
-            fold_statements(stmt.alternative)
+            fold_statements(stmt.alternative),
         )
     elif isinstance(stmt, While):
         return While(stmt.test, fold_statements(stmt.statements))

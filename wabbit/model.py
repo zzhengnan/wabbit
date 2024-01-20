@@ -9,16 +9,21 @@ class Type(Enum):
 
 
 # `Expression`s represent values
-class Expression: pass
+class Expression:
+    pass
+
 
 # `Statement`s represent actions
-class Statement: pass
+class Statement:
+    pass
+
 
 Statements = list[Statement]
 
 
 # `Relation`s are used in if/while tests
-class Relation: pass
+class Relation:
+    pass
 
 
 # Expressions
@@ -27,8 +32,13 @@ class Name(Expression):
     identifier: str
     type: Type = Type.UNSPECIFIED
 
-class GlobalName(Name): pass
-class LocalName(Name): pass
+
+class GlobalName(Name):
+    pass
+
+
+class LocalName(Name):
+    pass
 
 
 @dataclass
@@ -39,6 +49,7 @@ class Integer(Expression):
 @dataclass
 class Float(Expression):
     value: float
+
 
 Number = Integer | Float
 
@@ -90,8 +101,13 @@ class Declaration(Statement):
     # E.g., var x;
     name: Name
 
-class GlobalVar(Declaration): pass
-class LocalVar(Declaration): pass
+
+class GlobalVar(Declaration):
+    pass
+
+
+class LocalVar(Declaration):
+    pass
 
 
 @dataclass

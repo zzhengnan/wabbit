@@ -1,8 +1,8 @@
 import pytest
 
 from wabbit.model import *
-from wabbit.tokenizer import *
 from wabbit.parse import *
+from wabbit.tokenizer import *
 
 
 def parse_statement(source: str):
@@ -19,15 +19,25 @@ def test_declaration():
 
 
 def test_func():
-    assert parse_statement('func f(a int) int { }') == Func(Name('f'), Name('a', Type.INTEGER), [], Type.INTEGER)
-    assert parse_statement('func f(a float) float { }') == Func(Name('f'), Name('a', Type.FLOAT), [], Type.FLOAT)
-    assert parse_statement('func f(a float) int { }') == Func(Name('f'), Name('a', Type.FLOAT), [], Type.INTEGER)
-    assert parse_statement('func f(a float) int { return a; }') == Func(Name('f'), Name('a', Type.FLOAT), [Return(Name('a'))], Type.INTEGER)
+    assert parse_statement('func f(a int) int { }') == Func(
+        Name('f'), Name('a', Type.INTEGER), [], Type.INTEGER
+    )
+    assert parse_statement('func f(a float) float { }') == Func(
+        Name('f'), Name('a', Type.FLOAT), [], Type.FLOAT
+    )
+    assert parse_statement('func f(a float) int { }') == Func(
+        Name('f'), Name('a', Type.FLOAT), [], Type.INTEGER
+    )
+    assert parse_statement('func f(a float) int { return a; }') == Func(
+        Name('f'), Name('a', Type.FLOAT), [Return(Name('a'))], Type.INTEGER
+    )
 
     with pytest.raises(TypeError, match='Function parameter missing type annotation'):
         parse_statement('func f(a) int { }')
 
-    with pytest.raises(TypeError, match='Function return value missing type annotation'):
+    with pytest.raises(
+        TypeError, match='Function return value missing type annotation'
+    ):
         parse_statement('func f(a int) { }')
 
 
@@ -66,7 +76,7 @@ def test_statements():
     p = Parser(tokenize(source))
     assert p.parse_statements() == [
         Print(Integer(1)),
-        While(Eq(Integer(1), Integer(1)), [ Print(Integer(2)) ])
+        While(Eq(Integer(1), Integer(1)), [Print(Integer(2))]),
     ]
 
 
@@ -77,16 +87,14 @@ def test_term():
         Print(Integer(1)),
         Print(Name('xyz')),
         Print(Integer(2)),
-        Print(Call(Name('f'), Name('xyz')))
+        Print(Call(Name('f'), Name('xyz'))),
     ]
 
 
 def test_expr():
     source = 'print 1 + xyz;'
     p = Parser(tokenize(source))
-    assert p.parse_statements() == [
-        Print(Add(Integer(1), Name('xyz')))
-    ]
+    assert p.parse_statements() == [Print(Add(Integer(1), Name('xyz')))]
 
 
 class TestMathExpression:

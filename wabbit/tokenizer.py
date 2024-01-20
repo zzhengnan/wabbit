@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 SINGLE_CHAR_TOKENS = {
     '+': 'ADD',
     '*': 'MUL',
@@ -14,7 +13,6 @@ SINGLE_CHAR_TOKENS = {
     ')': 'RPAREN',
     '{': 'LBRACE',
     '}': 'RBRACE',
-    ';': 'SEMI',
 }
 MULTI_CHAR_TOKENS = {
     'var': 'VAR',
@@ -31,8 +29,9 @@ MULTI_CHAR_TOKENS = {
 
 @dataclass
 class Token:
-    toktype : str
-    tokvalue : str
+    toktype: str
+    tokvalue: str
+
 
 Tokens = list[Token]
 
@@ -50,7 +49,7 @@ def reset_curr_run(curr_run: str, tokens: Tokens) -> None:
     return None
 
 
-def verbose(text : str) -> Tokens:
+def verbose(text: str) -> Tokens:
     curr_run = None
     i = 0
     tokens = []
@@ -59,13 +58,13 @@ def verbose(text : str) -> Tokens:
         if curr_char in {' ', '\t', '\n'}:
             toktype = 'WHITESPACE'
         elif curr_char == '/':
-            if text[i:i + 2] == '//':
+            if text[i : i + 2] == '//':
                 j = i + 2
                 while j < len(text):
                     if text[j] == '\n':
                         break
                     j += 1
-                token = Token('COMMENT', text[i:j + 1])
+                token = Token('COMMENT', text[i : j + 1])
                 tokens.append(token)
                 i = j + 1
                 continue
@@ -84,7 +83,7 @@ def verbose(text : str) -> Tokens:
             if curr_run is not None and curr_run.isnumeric():
                 curr_run += curr_char
             else:
-                raise SyntaxError(f"Invalid syntax with '.'; it must follow a number")
+                raise SyntaxError("Invalid syntax with '.'; it must follow a number")
             i += 1
             continue
         elif curr_char.isdigit():
@@ -97,7 +96,9 @@ def verbose(text : str) -> Tokens:
         elif curr_char.isalpha():
             if curr_run is not None:
                 if curr_run.isnumeric():
-                    raise SyntaxError(f"Can't have letter {curr_char!r} follow number immediately")
+                    raise SyntaxError(
+                        f"Can't have letter {curr_char!r} follow number immediately"
+                    )
                 curr_run += curr_char
             else:
                 curr_run = curr_char
@@ -116,7 +117,7 @@ def verbose(text : str) -> Tokens:
 
 
 def remove_whitespace(tokens: Tokens) -> Tokens:
-    return [token for token in tokens if token.toktype not in {'WHITESPACE', 'COMMENT' }]
+    return [token for token in tokens if token.toktype not in {'WHITESPACE', 'COMMENT'}]
 
 
 def identify_keywords(tokens: Tokens) -> Tokens:
@@ -131,7 +132,7 @@ def identify_keywords(tokens: Tokens) -> Tokens:
     return new_tokens
 
 
-def tokenize(text : str) -> list[Token]:
+def tokenize(text: str) -> list[Token]:
     tokens = verbose(text)
     tokens = remove_whitespace(tokens)
     tokens = identify_keywords(tokens)

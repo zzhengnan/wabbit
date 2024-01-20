@@ -92,4 +92,6 @@ def format_expression(expr: Expression) -> str:
 
 def format_relation(relation: Relation) -> str:
     sign = RELATION_SIGNS[type(relation)]
-    return f'{format_expression(relation.left)} {sign} {format_expression(relation.right)}'
+    return (
+        f'{format_expression(relation.left)} {sign} {format_expression(relation.right)}'
+    )

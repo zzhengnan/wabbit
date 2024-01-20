@@ -3,35 +3,42 @@ from wabbit.model import *
 
 
 def test_script():
-    program = Program([
-        Variable(Name('x'), Integer(10)),
-        Assignment(Name('x'), Add(Name('x'), Integer(1))),
-        Print(Sub(Div(Integer(23), Integer(45)), Name('x'))),
-    ])
-    expected = (
-"""var x = 10;
+    program = Program(
+        [
+            Variable(Name('x'), Integer(10)),
+            Assignment(Name('x'), Add(Name('x'), Integer(1))),
+            Print(Sub(Div(Integer(23), Integer(45)), Name('x'))),
+        ]
+    )
+    expected = """var x = 10;
 x = x + 1;
-print 23 / 45 - x;""")
+print 23 / 45 - x;"""
     assert format_program(program) == expected
 
 
 def test_control():
-    program = Program([
-        Variable(Name('n'), Integer(0)),
-        While(Lt(Name('n'), Integer(10)), [
-            If(
-                Eq(Name('n'), Integer(5)),
-                [Variable(Name('x'), Mul(Name('n'), Integer(100))),
-                 Variable(Name('y'), Div(Name('n'), Integer(100))),
-                 Print(Name('x'))],
-                [Print(Name('n'))],
+    program = Program(
+        [
+            Variable(Name('n'), Integer(0)),
+            While(
+                Lt(Name('n'), Integer(10)),
+                [
+                    If(
+                        Eq(Name('n'), Integer(5)),
+                        [
+                            Variable(Name('x'), Mul(Name('n'), Integer(100))),
+                            Variable(Name('y'), Div(Name('n'), Integer(100))),
+                            Print(Name('x')),
+                        ],
+                        [Print(Name('n'))],
+                    ),
+                    Assignment(Name('n'), Add(Name('n'), Integer(1))),
+                    Assignment(Name('m'), Sub(Integer(1), Name('m'))),
+                ],
             ),
-            Assignment(Name('n'), Add(Name('n'), Integer(1))),
-            Assignment(Name('m'), Sub(Integer(1), Name('m'))),
-        ])
-    ])
-    expected = (
-"""var n = 0;
+        ]
+    )
+    expected = """var n = 0;
 while n < 10 {
     if n == 5 {
         var x = n * 100;
@@ -42,26 +49,31 @@ while n < 10 {
     }
     n = n + 1;
     m = 1 - m;
-}""")
+}"""
     assert format_program(program) == expected
 
 
 def test_function():
-    expected = (
-"""func square(x) {
+    expected = """func square(x) {
     var r = x * x;
     return r;
 }
 var result = square(4);
-print result;""")
-    program = Program([
-        Func(Name('square'), Name('x'), [
-            Variable(Name('r'), Mul(Name('x'), Name('x'))),
-            Return(Name('r')),
-        ]),
-        Variable(Name('result'), Call(Name('square'), Integer(4))),
-        Print(Name('result'))
-    ])
+print result;"""
+    program = Program(
+        [
+            Func(
+                Name('square'),
+                Name('x'),
+                [
+                    Variable(Name('r'), Mul(Name('x'), Name('x'))),
+                    Return(Name('r')),
+                ],
+            ),
+            Variable(Name('result'), Call(Name('square'), Integer(4))),
+            Print(Name('result')),
+        ]
+    )
     assert format_program(program) == expected
 
 

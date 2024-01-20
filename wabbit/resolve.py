@@ -1,4 +1,5 @@
 from typing import Self
+
 from .model import *
 
 
@@ -13,7 +14,7 @@ class Scope:
     def declare(self, var_name: str) -> None:
         """Declare new variable in current scope."""
         if var_name in self.var_names:
-            raise RuntimeError(f"{var_name!r} is already defined")
+            raise RuntimeError(f'{var_name!r} is already defined')
         self.var_names.add(var_name)
 
     def lookup(self, var_name: str) -> str:
@@ -30,7 +31,7 @@ class Scope:
         return Scope(parent_scope=self)
 
 
-def resolve_scopes(prog : Program) -> Program:
+def resolve_scopes(prog: Program) -> Program:
     global_scope = Scope()
     return Program(resolve_statements(prog.statements, global_scope))
 
@@ -73,7 +74,7 @@ def resolve_statement(stmt: Statement, scope: Scope) -> Statement:
         return Func(
             stmt.name,
             resolve_expression(stmt.param, func_scope),
-            resolve_statements(stmt.body, func_scope)
+            resolve_statements(stmt.body, func_scope),
         )
     elif isinstance(stmt, Return):
         return Return(resolve_expression(stmt.value, scope))
@@ -89,7 +90,9 @@ def resolve_expression(expr: Expression, scope: Scope) -> Expression:
     elif isinstance(expr, Number):
         return expr
     elif isinstance(expr, MathOp):
-        return type(expr)(resolve_expression(expr.left, scope), resolve_expression(expr.right, scope))
+        return type(expr)(
+            resolve_expression(expr.left, scope), resolve_expression(expr.right, scope)
+        )
     elif isinstance(expr, Call):
         return Call(
             resolve_expression(expr.name, scope),

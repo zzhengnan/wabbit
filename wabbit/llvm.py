@@ -4,10 +4,13 @@ _needs_print = False
 
 # Generate a unique name like ".1", ".2", ".3", etc.
 _n = 0
+
+
 def gensym() -> str:
     global _n
     _n += 1
     return f'.{_n}'
+
 
 LLVM_MATH_INSTRUCTIONS = {
     Add: 'add',
@@ -20,7 +23,6 @@ LLVM_COMPARISON_INSTRUCTIONS = {
     Lt: 'slt',
     Gt: 'sgt',
 }
-
 
 
 def generate_llvm(prog: Program) -> str:
@@ -133,7 +135,7 @@ def generate_expression(expr: Expression) -> tuple[str, str]:
         # return str(expr.value), str(expr.value)
         return '', str(expr.value)
     elif isinstance(expr, MathOp):
-        left_instr, left_var  = generate_expression(expr.left)
+        left_instr, left_var = generate_expression(expr.left)
         right_instr, right_var = generate_expression(expr.right)
         final_var = gensym()
         code = left_instr + right_instr
@@ -145,7 +147,10 @@ def generate_expression(expr: Expression) -> tuple[str, str]:
         fname = expr.name.identifier
         arg_instr, arg_var = generate_expression(expr.arg)
         return_var = gensym()
-        return arg_instr + f'%{return_var} = call i32 (i32) @{fname}(i32 {arg_var})\n', f'%{return_var}'
+        return (
+            arg_instr + f'%{return_var} = call i32 (i32) @{fname}(i32 {arg_var})\n',
+            f'%{return_var}',
+        )
     else:
         raise RuntimeError(f"Can't generate {expr}")
 
@@ -156,4 +161,7 @@ def generate_relation(relation: Relation) -> str:
     final_var = gensym()
     code = left_instr + right_instr
     comparison_sign = LLVM_COMPARISON_INSTRUCTIONS[type(relation)]
-    return code + f'%{final_var} = icmp {comparison_sign} i32 {left_var}, {right_var}\n', f'%{final_var}'
+    return (
+        code + f'%{final_var} = icmp {comparison_sign} i32 {left_var}, {right_var}\n',
+        f'%{final_var}',
+    )

@@ -1,7 +1,6 @@
 from .model import *
 from .tokenizer import *
 
-
 MATH_NODES = {
     'ADD': Add,
     'SUB': Sub,
@@ -14,6 +13,7 @@ RELATION_NODES = {
     'EQ': Eq,
 }
 
+
 class Parser:
     def __init__(self, tokens: list[Token]):
         self.tokens = tokens
@@ -25,7 +25,9 @@ class Parser:
             self.n += 1
             return tok
         else:
-            raise SyntaxError(f'Expected {expected_type}; got {tok} instead. Current token is {self.current_token}')
+            raise SyntaxError(
+                f'Expected {expected_type}; got {tok} instead. Current token is {self.current_token}'
+            )
 
     @property
     def current_token(self) -> Token:
@@ -67,7 +69,9 @@ class Parser:
         elif self.peek('RETURN'):
             return self.parse_return()
         else:
-            raise SyntaxError(f"Expected a statement; current token is {self.current_token}")
+            raise SyntaxError(
+                f'Expected a statement; current token is {self.current_token}'
+            )
 
     def parse_statements(self) -> Statements:
         stmts = []
@@ -107,7 +111,7 @@ class Parser:
             self.expect('RPAREN')
             return expr
         else:
-            raise SyntaxError("Expected a term")
+            raise SyntaxError('Expected a term')
 
     def parse_integer(self) -> Integer:
         tok = self.expect('INTEGER')
@@ -220,7 +224,9 @@ class Parser:
         elif self.peek('RPAREN'):
             raise TypeError('Function parameter missing type annotation')
         else:
-            raise TypeError(f'Unsupported parameter type; current token is {self.current_token}')
+            raise TypeError(
+                f'Unsupported parameter type; current token is {self.current_token}'
+            )
         self.expect('RPAREN')
 
         # Return type
@@ -233,7 +239,9 @@ class Parser:
             _ = self.expect('FLOAT_TYPE')
             return_type = Type.FLOAT
         else:
-            raise TypeError(f'Unsupported return type; current token is {self.current_token}')
+            raise TypeError(
+                f'Unsupported return type; current token is {self.current_token}'
+            )
 
         self.expect('LBRACE')
         body = self.parse_statements()
