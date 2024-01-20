@@ -1,4 +1,4 @@
-from model import *
+from .model import *
 
 
 def unscript_toplevel(prog: Program) -> Program:

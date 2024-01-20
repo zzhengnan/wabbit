@@ -1,5 +1,5 @@
-from deinit import *
-from model import *
+from wabbit.deinit import *
+from wabbit.model import *
 
 
 def test_script():

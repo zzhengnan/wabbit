@@ -1,5 +1,5 @@
 from typing import Self
-from model import *
+from .model import *
 
 
 class Scope:

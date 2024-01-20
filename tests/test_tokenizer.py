@@ -1,4 +1,4 @@
-from tokenizer import Token, tokenize
+from wabbit.tokenizer import Token, tokenize
 
 
 def test1():

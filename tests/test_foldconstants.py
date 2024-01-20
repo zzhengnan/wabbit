@@ -1,5 +1,5 @@
-from foldconstants import *
-from model import *
+from wabbit.foldconstants import *
+from wabbit.model import *
 
 
 class TestFoldExpressionAdd:

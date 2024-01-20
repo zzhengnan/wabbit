@@ -1,14 +1,14 @@
 import argparse
 
-from deinit import *
-from foldconstants import *
-from format import *
-from llvm import *
-from model import *
-from parse import *
-from resolve import *
-from tokenizer import *
-from unscript import *
+from .deinit import *
+from .foldconstants import *
+from .format import *
+from .llvm import *
+from .model import *
+from .parse import *
+from .resolve import *
+from .tokenizer import *
+from .unscript import *
 
 
 def cli() -> argparse.Namespace:

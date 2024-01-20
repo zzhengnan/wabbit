@@ -1,6 +1,6 @@
 from operator import add, sub, mul, floordiv
-from format import *
-from model import *
+from .format import *
+from .model import *
 
 
 MATH_OP_OPERATORS = {

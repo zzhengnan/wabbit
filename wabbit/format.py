@@ -1,4 +1,4 @@
-from model import *
+from .model import *
 
 INDENTATION = ' ' * 4
 EXPLICIT_TYPE = True

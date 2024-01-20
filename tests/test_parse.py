@@ -1,8 +1,8 @@
 import pytest
 
-from model import *
-from tokenizer import *
-from parse import *
+from wabbit.model import *
+from wabbit.tokenizer import *
+from wabbit.parse import *
 
 
 def parse_statement(source: str):
