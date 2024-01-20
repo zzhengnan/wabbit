@@ -1,101 +1,53 @@
 from wabbit.tokenizer import Token, tokenize
 
 
-def test1():
-    source = '+ * < =='
-    expected = [Token('ADD', '+'), Token('MUL', '*'), Token('LT', '<'), Token('EQ', '==')]
+def test_signs():
+    source = '+ - * / < =='
+    expected = [Token('ADD', '+'), Token('SUB', '-'), Token('MUL', '*'), Token('DIV', '/'), Token('LT', '<'), Token('EQ', '==')]
     assert tokenize(source) == expected
 
 
-def test2():
-    source = 'var x = 3;'
-    expected = [Token('VAR', 'var'), Token('NAME', 'x'), Token('ASSIGN', '='), Token('INTEGER', '3'), Token('SEMI', ';')]
-    assert tokenize(source) == expected
+def test_assignment():
+    assert tokenize('x = 3;') == [Token('NAME', 'x'), Token('ASSIGN', '='), Token('INTEGER', '3'), Token('SEMI', ';')]
 
 
-def test3():
-    source = 'x = 3;'
-    expected = [Token('NAME', 'x'), Token('ASSIGN', '='), Token('INTEGER', '3'), Token('SEMI', ';')]
-    assert tokenize(source) == expected
-
-
-def test4():
-    source =  'if 1 == 2 { } else { }'
-    expected = [
+def test_if():
+    assert tokenize('if 1 == 2 { } else { }') == [
         Token('IF', 'if'), Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '2'), Token('LBRACE', '{'), Token('RBRACE', '}'),
         Token('ELSE', 'else'), Token('LBRACE', '{'), Token('RBRACE', '}'),
     ]
-    assert tokenize(source) == expected
 
 
-def test5():
-    source = 'while 1 == 1 { }'
-    expected = [Token('WHILE', 'while'), Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '1'), Token('LBRACE', '{'), Token('RBRACE', '}')]
-    assert tokenize(source) == expected
+def test_while():
+    assert tokenize('while 1 == 1 { }') == [Token('WHILE', 'while'), Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '1'), Token('LBRACE', '{'), Token('RBRACE', '}')]
 
 
-def test6():
-    source = 'func f(a) { }'
-    expected = [
-        Token('FUNC', 'func'), Token('NAME', 'f'), Token('LPAREN', '('), Token('NAME', 'a'), Token('RPAREN', ')'), Token('LBRACE', '{'), Token('RBRACE', '}')
-    ]
-    assert tokenize(source) == expected
+def test_return():
+    assert tokenize('return 3;') == [Token('RETURN', 'return'), Token('INTEGER', '3'), Token('SEMI', ';')]
 
 
-def test7():
-    source = 'return 3;'
-    expected = [Token('RETURN', 'return'), Token('INTEGER', '3'), Token('SEMI', ';')]
-    assert tokenize(source) == expected
-
-
-def test8():
-    source = '1 == 1'
-    expected = [Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '1')]
-    assert tokenize(source) == expected
-
-
-def test9():
-    source = 'print 1; while 1==1 { print 2; }'
-    expected = [
+def test_mixed():
+    assert tokenize('print 1; while 1==1 { print 2; }') == [
         Token('PRINT', 'print'), Token('INTEGER', '1'), Token('SEMI', ';'),
         Token('WHILE', 'while'), Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '1'),
         Token('LBRACE', '{'), Token('PRINT', 'print'), Token('INTEGER', '2'), Token('SEMI', ';'), Token('RBRACE', '}')
     ]
-    assert tokenize(source) == expected
+    assert tokenize('print 1;     // A comment\nvar x = 3;') == [
+        Token('PRINT', 'print'), Token('INTEGER', '1'), Token('SEMI', ';'),
+        Token('VAR', 'var'), Token('NAME', 'x'), Token('ASSIGN', '='), Token('INTEGER', '3'), Token('SEMI', ';')
+    ]
 
 
-def test10():
-    source = 'print 1; print xyz; print (2); print f(xyz);'
-    expected = [
+def test_print():
+    assert tokenize('print 1; print xyz; print (2); print f(xyz);') == [
         Token('PRINT', 'print'), Token('INTEGER', '1'), Token('SEMI', ';'),
         Token('PRINT', 'print'), Token('NAME', 'xyz'), Token('SEMI', ';'),
         Token('PRINT', 'print'), Token('LPAREN', '('), Token('INTEGER', '2'), Token('RPAREN', ')'), Token('SEMI', ';'),
         Token('PRINT', 'print'), Token('NAME', 'f'), Token('LPAREN', '('), Token('NAME', 'xyz'), Token('RPAREN', ')'), Token('SEMI', ';'),
     ]
-    assert tokenize(source) == expected
-
-
-def test11():
-    source = 'print 1 + xyz;'
-    expected = [
+    assert tokenize('print 1 + xyz;') == [
         Token('PRINT', 'print'), Token('INTEGER', '1'), Token('ADD', '+'), Token('NAME', 'xyz'), Token('SEMI', ';')
     ]
-    assert tokenize(source) == expected
-
-
-def test12():
-    source = 'print 1;     // A comment\nvar x = 3;'
-    expected = [
-        Token('PRINT', 'print'), Token('INTEGER', '1'), Token('SEMI', ';'),
-        Token('VAR', 'var'), Token('NAME', 'x'), Token('ASSIGN', '='), Token('INTEGER', '3'), Token('SEMI', ';')
-    ]
-    assert tokenize(source) == expected
-
-
-def test13():
-    source = '+ - * /'
-    expected = [Token('ADD', '+'), Token('SUB', '-'), Token('MUL', '*'), Token('DIV', '/')]
-    assert tokenize(source) == expected
 
 
 def test_number():
@@ -127,39 +79,25 @@ def test_relation():
         assert tokenize('1 == 2') == [Token('INTEGER', '1'), Token('EQ', '=='), Token('INTEGER', '2')]
 
 
-def test18():
-    source = 'var x;'
-    expected = [Token('VAR', 'var'), Token('NAME', 'x'), Token('SEMI', ';')]
-    assert tokenize(source) == expected
+def test_declaration():
+    assert tokenize('var x;') == [Token('VAR', 'var'), Token('NAME', 'x'), Token('SEMI', ';')]
+    assert tokenize('var x int;') == [Token('VAR', 'var'), Token('NAME', 'x'), Token('INTEGER_TYPE', 'int'), Token('SEMI', ';')]
+    assert tokenize('var x float;') == [Token('VAR', 'var'), Token('NAME', 'x'), Token('FLOAT_TYPE', 'float'), Token('SEMI', ';')]
 
 
-class TestTypeAnnotation:
-    def test1(self):
-        source = 'var x int;'
-        expected = [Token('VAR', 'var'), Token('NAME', 'x'), Token('INTEGER_TYPE', 'int'), Token('SEMI', ';')]
-        assert tokenize(source) == expected
-
-    def test2(self):
-        source = 'func foo(x int) int { }'
-        expected = [
-            Token('FUNC', 'func'), Token('NAME', 'foo'),
-            Token('LPAREN', '('), Token('NAME', 'x'), Token('INTEGER_TYPE', 'int'), Token('RPAREN', ')'), Token('INTEGER_TYPE', 'int'),
-            Token('LBRACE', '{'), Token('RBRACE', '}')]
-        assert tokenize(source) == expected
-
-    def test3(self):
-        source = 'var x float;'
-        expected = [Token('VAR', 'var'), Token('NAME', 'x'), Token('FLOAT_TYPE', 'float'), Token('SEMI', ';')]
-        assert tokenize(source) == expected
-
-    def test2(self):
-        source = 'func foo(x float) float { }'
-        expected = [
-            Token('FUNC', 'func'), Token('NAME', 'foo'),
-            Token('LPAREN', '('), Token('NAME', 'x'), Token('FLOAT_TYPE', 'float'), Token('RPAREN', ')'), Token('FLOAT_TYPE', 'float'),
-            Token('LBRACE', '{'), Token('RBRACE', '}')]
-        assert tokenize(source) == expected
-
+def test_func():
+    assert tokenize('func foo(x int) int { }') == [
+        Token('FUNC', 'func'), Token('NAME', 'foo'),
+        Token('LPAREN', '('), Token('NAME', 'x'), Token('INTEGER_TYPE', 'int'), Token('RPAREN', ')'), Token('INTEGER_TYPE', 'int'),
+        Token('LBRACE', '{'), Token('RBRACE', '}')
+    ]
+    assert tokenize('func foo(x float) float { }') == [
+        Token('FUNC', 'func'), Token('NAME', 'foo'),
+        Token('LPAREN', '('), Token('NAME', 'x'), Token('FLOAT_TYPE', 'float'), Token('RPAREN', ')'), Token('FLOAT_TYPE', 'float'),
+        Token('LBRACE', '{'), Token('RBRACE', '}')]
+    assert tokenize('func f(a) { }') == [
+        Token('FUNC', 'func'), Token('NAME', 'f'), Token('LPAREN', '('), Token('NAME', 'a'), Token('RPAREN', ')'), Token('LBRACE', '{'), Token('RBRACE', '}')
+    ]
 
 
 def test_variable():

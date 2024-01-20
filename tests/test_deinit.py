@@ -21,6 +21,7 @@ def test_script():
 
     assert deinit_program(prog) == expected
 
+
 def test_control():
     # var n = 0;
     # while n < 10 {

@@ -69,6 +69,7 @@ def test_statements():
         While(Eq(Integer(1), Integer(1)), [ Print(Integer(2)) ])
     ]
 
+
 def test_term():
     source = 'print 1; print xyz; print (2); print f(xyz);'
     p = Parser(tokenize(source))
@@ -78,6 +79,7 @@ def test_term():
         Print(Integer(2)),
         Print(Call(Name('f'), Name('xyz')))
     ]
+
 
 def test_expr():
     source = 'print 1 + xyz;'
