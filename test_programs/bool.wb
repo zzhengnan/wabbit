@@ -12,5 +12,3 @@ print y;       // Produces 'false'
 print x == y;  // Produces 'false'
 print x != y;  // Produces 'true'
 print not x;   // Produces 'false'
-
-

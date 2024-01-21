@@ -28,7 +28,7 @@ LLVM_COMPARISON_INSTRUCTIONS = {
 def generate_llvm(prog: Program) -> str:
     code = '\n'.join(generate_statements(prog.statements))
     if _needs_print:
-        code += '\ndeclare i32 @_print_int(i32 %x)'
+        code += '\n\ndeclare i32 @_print_int(i32 %x)'
     return code
 
 

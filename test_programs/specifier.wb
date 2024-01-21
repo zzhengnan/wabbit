@@ -12,5 +12,3 @@ func square(a int) int {  // Types are required on functions
 
 y = square(x);
 print y;
-
-

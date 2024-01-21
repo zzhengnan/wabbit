@@ -64,7 +64,3 @@ if x != y {
 } else {
    print 0;
 }
-
-
-
-
