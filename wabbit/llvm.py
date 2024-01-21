@@ -1,4 +1,4 @@
-from .model import *
+from wabbit.model import *
 
 _needs_print = False
 

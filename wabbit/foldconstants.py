@@ -1,7 +1,7 @@
 from operator import add, floordiv, mul, sub
 
-from .format import *
-from .model import *
+from wabbit.format import *
+from wabbit.model import *
 
 MATH_OP_OPERATORS = {Add: add, Sub: sub, Mul: mul, Div: floordiv}
 

@@ -1,14 +1,14 @@
 import argparse
 
-from .deinit import *
-from .foldconstants import *
-from .format import *
-from .llvm import *
-from .model import *
-from .parse import *
-from .resolve import *
-from .tokenizer import *
-from .unscript import *
+from wabbit.deinit import *
+from wabbit.foldconstants import *
+from wabbit.format import *
+from wabbit.llvm import *
+from wabbit.model import *
+from wabbit.parse import *
+from wabbit.resolve import *
+from wabbit.tokenizer import *
+from wabbit.unscript import *
 
 
 def cli() -> argparse.Namespace:

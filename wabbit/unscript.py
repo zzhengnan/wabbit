@@ -1,4 +1,4 @@
-from .model import *
+from wabbit.model import *
 
 
 def unscript_toplevel(prog: Program) -> Program:

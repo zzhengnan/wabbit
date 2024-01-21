@@ -1,5 +1,5 @@
-from .format import *
-from .model import *
+from wabbit.format import *
+from wabbit.model import *
 
 
 def deinit_program(prog: Program) -> Program:

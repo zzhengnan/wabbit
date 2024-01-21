@@ -1,5 +1,5 @@
-from .model import *
-from .tokenizer import *
+from wabbit.model import *
+from wabbit.tokenizer import *
 
 MATH_NODES = {
     'ADD': Add,

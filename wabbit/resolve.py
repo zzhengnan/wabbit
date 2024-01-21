@@ -1,6 +1,6 @@
 from typing import Self
 
-from .model import *
+from wabbit.model import *
 
 
 class Scope:
